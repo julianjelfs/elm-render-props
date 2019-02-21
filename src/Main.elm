@@ -25,7 +25,7 @@ init =
 
 
 type Msg
-    = ColourClickerMsg C.Msg
+    = ColourClickerMsg (C.Msg Msg)
     | ButtonClicked
 
 
@@ -34,10 +34,10 @@ update msg model =
     case msg of
         ColourClickerMsg subMsg ->
             let
-                subModel =
+                ( subModel, subCmd ) =
                     C.update subMsg model.colourClicker
             in
-            ( { model | colourClicker = subModel }, Cmd.none )
+            ( { model | colourClicker = subModel }, subCmd )
 
         ButtonClicked ->
             let
@@ -59,7 +59,7 @@ view model =
             C.view model.colourClicker
                 [ div []
                     [ text "Now we need to add a button"
-                    , button [ onClick ButtonClicked ] [ "Click me!" ]
+                    , button [ onClick ButtonClicked ] [ text "Click me!" ]
                     ]
                 ]
         ]
